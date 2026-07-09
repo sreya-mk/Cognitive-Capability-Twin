@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 
 from ..database import SessionLocal, Skill, UserProfile
 from ..services.llm import extract_skills_from_text
-from ..services.heuristics import compute_growth_projections, compute_employability
+from ..services.heuristics import compute_growth_projections, compute_employability, recommend_next_steps
 
 router = APIRouter(prefix="/api", tags=["profile"])
 
@@ -54,6 +54,20 @@ class SimulateResponse(BaseModel):
     roles_before: List[RoleMatchDetail]
     roles_after: List[RoleMatchDetail]
     new_roles_unlocked: List[str]
+
+class InsightRequest(BaseModel):
+    career_goal: str | None = None
+    current_role: str | None = None
+
+class InsightSkill(BaseModel):
+    name: str
+    reason: str
+
+class InsightResponse(BaseModel):
+    focus_area: str
+    rationale: str
+    recommended_roles: List[RoleMatchDetail]
+    suggested_skills: List[InsightSkill]
 
 # ─── Endpoints ───────────────────────────────────────────────────────────────
 
@@ -202,6 +216,38 @@ def simulate(payload: SimulateInput):
             roles_before=roles_before,
             roles_after=roles_after,
             new_roles_unlocked=new_unlocked,
+        )
+    finally:
+        db.close()
+
+
+@router.post("/insights", response_model=InsightResponse, summary="Recommend next skills and best-matching roles")
+def get_insights(payload: InsightRequest):
+    db = SessionLocal()
+    try:
+        profile = db.query(UserProfile).order_by(UserProfile.id.desc()).first()
+        career_goal = payload.career_goal or (profile.career_goal if profile else None)
+        current_role = payload.current_role or (profile.current_role if profile else None)
+        roles = _load_roles()
+        current_skills = [s.name for s in db.query(Skill).all()]
+
+        insight_data = recommend_next_steps(current_skills, roles, career_goal=career_goal, current_role=current_role)
+        role_matches = [
+            RoleMatchDetail(
+                role=item["role"],
+                match_pct=item["match_pct"],
+                matched=item["matched"],
+                missing=item["missing"],
+            )
+            for item in insight_data["recommended_roles"]
+        ]
+        suggested_skills = [InsightSkill(**item) for item in insight_data["suggested_skills"]]
+
+        return InsightResponse(
+            focus_area=insight_data["focus_area"],
+            rationale=insight_data["rationale"],
+            recommended_roles=role_matches,
+            suggested_skills=suggested_skills,
         )
     finally:
         db.close()

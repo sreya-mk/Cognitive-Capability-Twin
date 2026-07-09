@@ -3,6 +3,7 @@ import ProfileForm from './components/ProfileForm'
 import SkillGraph from './components/SkillGraph'
 import GrowthChart from './components/GrowthChart'
 import Simulator from './components/Simulator'
+import InsightsPanel from './components/InsightsPanel'
 
 const NAV_ITEMS = [
   { id: 'profile' as const, label: 'Profile Input', icon: '⚙' },
@@ -149,6 +150,7 @@ function App() {
                 </div>
                 <span className="stat-badge stat-badge-blue">Heuristic Model</span>
               </div>
+              <InsightsPanel />
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                 <SkillGraph />
                 <GrowthChart />
