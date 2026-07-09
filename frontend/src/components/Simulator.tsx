@@ -41,17 +41,20 @@ const Simulator: React.FC = () => {
   const delta = result ? result.after - result.before : 0
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold text-white mb-2">Opportunity Simulator</h2>
-        <p className="text-slate-400 text-sm leading-relaxed">
-          Pick a skill you don't currently have. We'll compute your new employability score against {' '}
-          <span className="text-slate-300">15+ role templates</span> and explain the change using rule-based logic.{' '}
-          <span className="stat-badge stat-badge-blue text-xs ml-1">Rule-based explainability</span>
-        </p>
+    <div className="max-w-4xl mx-auto">
+      <div className="mb-6 glass p-6 rounded-2xl">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">Opportunity Simulator</h2>
+            <p className="text-slate-600 text-sm leading-relaxed max-w-2xl">
+              Explore how a new capability could improve your marketability by simulating it against role templates and growth scenarios.
+            </p>
+          </div>
+          <span className="stat-badge stat-badge-blue">Explainable insights</span>
+        </div>
       </div>
 
-      <div className="glass p-6 space-y-5">
+      <div className="glass p-6 rounded-2xl space-y-5">
         <div className="space-y-2">
           <label className="section-label">What if I learned…</label>
           <div className="flex gap-3">
@@ -90,7 +93,7 @@ const Simulator: React.FC = () => {
             <div className="grid grid-cols-3 gap-4 text-center">
               <div className="glass p-4 rounded-xl space-y-1">
                 <p className="section-label">Before</p>
-                <p className="text-3xl font-bold font-mono text-slate-300">{result.before.toFixed(1)}<span className="text-lg">%</span></p>
+                <p className="text-3xl font-bold font-mono text-slate-700">{result.before.toFixed(1)}<span className="text-lg">%</span></p>
                 <p className="text-xs text-slate-500">Employability</p>
               </div>
               <div className="flex items-center justify-center">
@@ -121,7 +124,7 @@ const Simulator: React.FC = () => {
               </div>
               <div className="space-y-1">
                 <div className="flex justify-between text-xs text-slate-400">
-                  <span>After adding <strong className="text-white">{selectedSkill}</strong></span>
+                  <span>After adding <strong className="text-slate-900">{selectedSkill}</strong></span>
                   <span className="font-mono text-emerald-400">{result.after.toFixed(1)}%</span>
                 </div>
                 <div className="progress-bar">
@@ -133,7 +136,7 @@ const Simulator: React.FC = () => {
             {/* Explanation */}
             <div className="glass p-4 rounded-xl space-y-2">
               <p className="section-label">Rule-based Explanation</p>
-              <p className="text-sm text-slate-300 leading-relaxed">{result.explanation}</p>
+              <p className="text-sm text-slate-700 leading-relaxed">{result.explanation}</p>
               <p className="text-xs text-slate-500 italic">
                 ⓘ This is a rule-based explainable layer — a stepping stone toward SHAP/LIME-based explanations once a trained model exists.
               </p>

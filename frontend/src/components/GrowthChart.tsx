@@ -60,7 +60,7 @@ const GrowthChart: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <p className="section-label mb-1">Growth Projection</p>
-          <h3 className="text-lg font-semibold text-white">Skill Confidence Over Time</h3>
+          <h3 className="text-lg font-semibold text-slate-900">Skill Confidence Over Time</h3>
         </div>
         <span className="stat-badge stat-badge-purple">Logistic Heuristic</span>
       </div>
@@ -110,7 +110,7 @@ const GrowthChart: React.FC = () => {
         <div className="pt-2 border-t border-white/5">
           <div className="flex flex-wrap gap-2">
             {skills.slice(0, 6).map((s, i) => (
-              <div key={s.name} className="flex items-center gap-1.5 text-xs text-slate-400">
+              <div key={s.name} className="flex items-center gap-1.5 text-xs text-slate-600">
                 <span className="w-2.5 h-2.5 rounded-full inline-block" style={{ background: COLORS[i % COLORS.length] }} />
                 {s.name}
               </div>

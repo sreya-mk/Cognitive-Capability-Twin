@@ -31,16 +31,20 @@ function ProfileForm() {
   const sampleText = `I'm a software engineer with 3 years of experience. I work primarily with Python for data pipelines and machine learning experiments using scikit-learn and PyTorch. I have strong experience with Docker and Kubernetes for deploying services, and I use Git daily. I'm comfortable with SQL for data querying, and I've built REST APIs with FastAPI. I'm studying Deep Learning and NLP in my spare time.`
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold text-white mb-2">Profile Input</h2>
-        <p className="text-slate-400 text-sm leading-relaxed">
-          Paste your resume, GitHub project descriptions, and a short "about me". The AI will extract your skills, 
-          categorise them, and estimate confidence scores. No API key? A built-in demo set is used automatically.
-        </p>
+    <div className="max-w-4xl mx-auto">
+      <div className="mb-6 glass p-6 rounded-2xl">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">Profile Input</h2>
+            <p className="text-slate-600 text-sm leading-relaxed max-w-2xl">
+              Paste your resume, GitHub project descriptions, and a short “about me”. The platform will extract your strengths, map them to a growth model, and help you plan next steps.
+            </p>
+          </div>
+          <span className="stat-badge stat-badge-purple">AI-assisted analysis</span>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="glass p-6 rounded-2xl space-y-5">
         {/* Text area */}
         <div className="space-y-2">
           <label className="section-label">Profile Text</label>
@@ -59,7 +63,7 @@ function ProfileForm() {
               <button
                 type="button"
                 onClick={() => setRawText(sampleText)}
-                className="absolute bottom-3 right-3 text-xs px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-colors"
+                className="absolute bottom-3 right-3 text-xs px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition-colors"
                 style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)' }}
               >
                 Use sample →
@@ -130,7 +134,7 @@ function ProfileForm() {
           </button>
 
           {message && (
-            <p className={`text-sm ${status === 'success' ? 'text-emerald-400' : status === 'error' ? 'text-red-400' : 'text-slate-400'}`}>
+            <p className={`text-sm ${status === 'success' ? 'text-emerald-600' : status === 'error' ? 'text-red-600' : 'text-slate-600'}`}>
               {message}
             </p>
           )}
@@ -138,9 +142,9 @@ function ProfileForm() {
       </form>
 
       {/* Info card */}
-      <div className="mt-8 glass p-5 space-y-3">
+      <div className="mt-6 glass p-5 space-y-3">
         <p className="section-label">How it works</p>
-        <div className="space-y-2 text-sm text-slate-400">
+        <div className="space-y-2 text-sm text-slate-600">
           <div className="flex items-start gap-2">
             <span className="text-teal-400 mt-0.5">①</span>
             <span>Your text is sent to an LLM (OpenAI / Anthropic) with a structured prompt requesting JSON skill output.</span>

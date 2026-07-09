@@ -14,7 +14,7 @@ function App() {
   const [activeTab, setActiveTab] = useState<'profile' | 'dashboard' | 'simulate'>('profile')
 
   return (
-    <div className="min-h-screen bg-[#0a0e1a] text-slate-200 flex flex-col relative overflow-hidden">
+    <div className="min-h-screen bg-transparent text-slate-800 flex flex-col relative overflow-hidden">
       {/* Ambient background orbs */}
       <div className="orb orb-1" />
       <div className="orb orb-2" />
@@ -25,9 +25,10 @@ function App() {
       {/* Header */}
       <header className="relative z-10 px-6 py-4 flex items-center justify-between"
         style={{
-          background: 'rgba(10, 14, 26, 0.85)',
-          backdropFilter: 'blur(20px)',
-          borderBottom: '1px solid rgba(255,255,255,0.07)',
+          background: 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(18px)',
+          borderBottom: '1px solid rgba(148, 163, 184, 0.16)',
+          boxShadow: '0 8px 24px rgba(15, 23, 42, 0.04)',
         }}
       >
         <div className="flex items-center gap-3">
@@ -66,18 +67,69 @@ function App() {
 
       {/* Main content */}
       <main className="flex-1 relative z-10 p-6 overflow-auto">
-        <div className="animate-fade-in" key={activeTab}>
-          {activeTab === 'profile' && <ProfileForm />}
+        <div className="mx-auto max-w-7xl animate-fade-in" key={activeTab}>
+          {activeTab === 'profile' && (
+            <div className="space-y-6">
+              <section className="glass p-8 rounded-3xl">
+                <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+                  <div className="space-y-4">
+                    <span className="stat-badge stat-badge-blue">Career intelligence platform</span>
+                    <h2 className="text-4xl font-semibold text-slate-900 leading-tight">
+                      Understand your growth, plan your next move, and simulate new opportunities.
+                    </h2>
+                    <p className="text-slate-600 text-lg leading-8 max-w-2xl">
+                      The Cognitive Capability Twin turns your background into an interactive skill profile that helps you see where you are, where you are growing, and where your next opportunity could be.
+                    </p>
+                    <div className="flex flex-wrap gap-3 pt-2">
+                      <button className="btn-primary" onClick={() => setActiveTab('dashboard')}>View dashboard</button>
+                      <button className="px-4 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition-colors" onClick={() => setActiveTab('simulate')}>Try simulator</button>
+                    </div>
+                  </div>
+                  <div className="glass-strong p-6 rounded-2xl space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-semibold text-slate-900">Current readiness</p>
+                        <p className="text-3xl font-bold text-emerald-600">82%</p>
+                      </div>
+                      <span className="stat-badge stat-badge-green">On track</span>
+                    </div>
+                    <div className="space-y-3">
+                      <div>
+                        <div className="flex justify-between text-sm text-slate-600 mb-1">
+                          <span>Skill maturity</span>
+                          <span>78%</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-slate-100">
+                          <div className="h-2 rounded-full bg-gradient-to-r from-teal-500 to-blue-500" style={{ width: '78%' }} />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between text-sm text-slate-600 mb-1">
+                          <span>Role readiness</span>
+                          <span>84%</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-slate-100">
+                          <div className="h-2 rounded-full bg-gradient-to-r from-violet-500 to-blue-500" style={{ width: '84%' }} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <ProfileForm />
+            </div>
+          )}
           {activeTab === 'dashboard' && (
             <div className="space-y-6">
-              <div className="flex items-center gap-3 mb-2">
-                <h2 className="text-2xl font-bold text-white">Your Skill Dashboard</h2>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-2xl font-bold text-slate-900">Your Skill Dashboard</h2>
+                  <p className="text-slate-600 text-sm mt-1">
+                    A transparent view of your capabilities, projected momentum, and opportunity landscape.
+                  </p>
+                </div>
                 <span className="stat-badge stat-badge-blue">Heuristic Model</span>
               </div>
-              <p className="text-slate-400 text-sm -mt-3">
-                Skill map and projected growth powered by a transparent rule-based heuristic —{' '}
-                <span className="text-slate-300">designed to be replaced by a trained LSTM/Prophet model once longitudinal data exists.</span>
-              </p>
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                 <SkillGraph />
                 <GrowthChart />
@@ -90,7 +142,7 @@ function App() {
 
       {/* Footer */}
       <footer className="relative z-10 px-6 py-3 text-center text-xs text-slate-600"
-        style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
+        style={{ borderTop: '1px solid rgba(148, 163, 184, 0.16)' }}
       >
         © 2026 Cognitive Capability Twin · Portfolio Demo ·{' '}
         <span className="text-slate-500">All ML labels are honest heuristics, not trained models</span>

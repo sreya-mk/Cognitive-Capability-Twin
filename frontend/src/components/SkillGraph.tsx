@@ -114,9 +114,9 @@ const SkillGraph: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <p className="section-label mb-1">Skill Map</p>
-          <h3 className="text-lg font-semibold text-white">Knowledge Graph</h3>
+          <h3 className="text-lg font-semibold text-slate-900">Knowledge Graph</h3>
         </div>
-        <div className="flex items-center gap-3 text-xs text-slate-400">
+        <div className="flex items-center gap-3 text-xs text-slate-600">
           <span className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-sm inline-block" style={{ background: 'rgba(0, 210, 172, 0.8)' }} />
             Technical
