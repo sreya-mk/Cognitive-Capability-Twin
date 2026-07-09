@@ -1,11 +1,12 @@
 import os
 import json
 from typing import List, Dict
+from datetime import datetime
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
-from ..database import SessionLocal, Skill, UserProfile
+from ..database import SessionLocal, Skill, UserProfile, InsightRecord
 from ..services.llm import extract_skills_from_text
 from ..services.heuristics import compute_growth_projections, compute_employability, recommend_next_steps
 
@@ -64,6 +65,14 @@ class InsightSkill(BaseModel):
     reason: str
 
 class InsightResponse(BaseModel):
+    focus_area: str
+    rationale: str
+    recommended_roles: List[RoleMatchDetail]
+    suggested_skills: List[InsightSkill]
+
+class SavedInsightRecord(BaseModel):
+    id: int
+    created_at: str
     focus_area: str
     rationale: str
     recommended_roles: List[RoleMatchDetail]
@@ -249,5 +258,65 @@ def get_insights(payload: InsightRequest):
             recommended_roles=role_matches,
             suggested_skills=suggested_skills,
         )
+    finally:
+        db.close()
+
+
+@router.post("/insights/save", summary="Save current insight to history")
+def save_insight(payload: InsightResponse):
+    db = SessionLocal()
+    try:
+        profile = db.query(UserProfile).order_by(UserProfile.id.desc()).first()
+        current_role = profile.current_role if profile else None
+        career_goal = profile.career_goal if profile else None
+
+        roles_json = json.dumps([
+            {"role": r.role, "match_pct": r.match_pct, "matched": r.matched, "missing": r.missing}
+            for r in payload.recommended_roles
+        ])
+        skills_json = json.dumps([
+            {"name": s.name, "reason": s.reason}
+            for s in payload.suggested_skills
+        ])
+
+        record = InsightRecord(
+            focus_area=payload.focus_area,
+            rationale=payload.rationale,
+            recommended_roles_json=roles_json,
+            suggested_skills_json=skills_json,
+            current_role=current_role,
+            career_goal=career_goal,
+        )
+        db.add(record)
+        db.commit()
+        return {"message": "Insight saved", "id": record.id}
+    finally:
+        db.close()
+
+
+@router.get("/insights/history", response_model=List[SavedInsightRecord], summary="Get insights history")
+def get_insights_history():
+    db = SessionLocal()
+    try:
+        records = db.query(InsightRecord).order_by(InsightRecord.created_at.desc()).limit(10).all()
+        result = []
+        for r in records:
+            roles = json.loads(r.recommended_roles_json)
+            skills = json.loads(r.suggested_skills_json)
+            role_matches = [
+                RoleMatchDetail(**item) for item in roles
+            ]
+            suggested_skills = [
+                InsightSkill(**item) for item in skills
+            ]
+            result.append(SavedInsightRecord(
+                id=r.id,
+                created_at=r.created_at.isoformat() if r.created_at else "",
+                focus_area=r.focus_area,
+                rationale=r.rationale,
+                recommended_roles=role_matches,
+                suggested_skills=suggested_skills,
+            ))
+        return result
     finally:
         db.close()

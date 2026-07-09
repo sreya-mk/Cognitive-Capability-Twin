@@ -1,6 +1,7 @@
 import os
-from sqlalchemy import create_engine, Column, Integer, String, Float, Boolean, ForeignKey, Table
+from sqlalchemy import create_engine, Column, Integer, String, Float, Boolean, ForeignKey, Table, DateTime
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker
+from datetime import datetime
 
 # SQLite database path (project root)
 DB_PATH = os.getenv("DB_PATH", "app.db")
@@ -40,6 +41,17 @@ class UserProfile(Base):
     current_role = Column(String, nullable=True)
     career_goal = Column(String, nullable=True)
     # One-to-many relationship to skills via foreign key not needed; we query skills separately.
+
+class InsightRecord(Base):
+    __tablename__ = "insight_records"
+    id = Column(Integer, primary_key=True)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+    focus_area = Column(String, nullable=False)
+    rationale = Column(String, nullable=False)
+    recommended_roles_json = Column(String, nullable=False)  # JSON string
+    suggested_skills_json = Column(String, nullable=False)  # JSON string
+    current_role = Column(String, nullable=True)
+    career_goal = Column(String, nullable=True)
 
 def init_db():
     Base.metadata.create_all(bind=engine)

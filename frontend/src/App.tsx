@@ -4,15 +4,17 @@ import SkillGraph from './components/SkillGraph'
 import GrowthChart from './components/GrowthChart'
 import Simulator from './components/Simulator'
 import InsightsPanel from './components/InsightsPanel'
+import InsightsHistory from './components/InsightsHistory'
 
 const NAV_ITEMS = [
   { id: 'profile' as const, label: 'Profile Input', icon: '⚙' },
   { id: 'dashboard' as const, label: 'Dashboard', icon: '⬡' },
+  { id: 'history' as const, label: 'History', icon: '📊' },
   { id: 'simulate' as const, label: 'Simulator', icon: '◈' },
 ]
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'profile' | 'dashboard' | 'simulate'>('profile')
+  const [activeTab, setActiveTab] = useState<'profile' | 'dashboard' | 'history' | 'simulate'>('profile')
 
   return (
     <div className="min-h-screen bg-transparent text-slate-800 flex flex-col relative overflow-hidden">
@@ -155,6 +157,20 @@ function App() {
                 <SkillGraph />
                 <GrowthChart />
               </div>
+            </div>
+          )}
+          {activeTab === 'history' && (
+            <div className="space-y-6">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-2xl font-bold text-slate-900">Insights Timeline</h2>
+                  <p className="text-slate-600 text-sm mt-1">
+                    View and compare your recommendations over time as your skills evolve.
+                  </p>
+                </div>
+                <span className="stat-badge stat-badge-green">Growth tracking</span>
+              </div>
+              <InsightsHistory />
             </div>
           )}
           {activeTab === 'simulate' && <Simulator />}

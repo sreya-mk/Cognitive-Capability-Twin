@@ -23,6 +23,8 @@ interface InsightPayload {
 const InsightsPanel: React.FC = () => {
   const [insights, setInsights] = useState<InsightPayload | null>(null)
   const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
 
   useEffect(() => {
     const fetchInsights = async (payload: { current_role?: string; career_goal?: string } = {}) => {
@@ -50,6 +52,20 @@ const InsightsPanel: React.FC = () => {
     }
   }, [])
 
+  const handleSaveInsight = async () => {
+    if (!insights) return
+    setSaving(true)
+    try {
+      await axios.post('/api/insights/save', insights)
+      setSaved(true)
+      setTimeout(() => setSaved(false), 3000)
+    } catch (err) {
+      console.error('Failed to save insight', err)
+    } finally {
+      setSaving(false)
+    }
+  }
+
   return (
     <div className="glass p-6 rounded-2xl mb-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -57,7 +73,22 @@ const InsightsPanel: React.FC = () => {
           <p className="section-label">New feature</p>
           <h3 className="text-xl font-semibold text-slate-900">Next-step intelligence</h3>
         </div>
-        <span className="stat-badge stat-badge-purple">Adaptive guidance</span>
+        <div className="flex items-center gap-2">
+          <span className="stat-badge stat-badge-purple">Adaptive guidance</span>
+          {insights && (
+            <button
+              onClick={handleSaveInsight}
+              disabled={saving}
+              className={`px-3 py-1 text-xs font-semibold rounded-lg transition-all ${
+                saved
+                  ? 'bg-emerald-100 text-emerald-700'
+                  : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+              }`}
+            >
+              {saving ? 'Saving…' : saved ? '✓ Saved' : 'Save'}
+            </button>
+          )}
+        </div>
       </div>
 
       {loading ? (
