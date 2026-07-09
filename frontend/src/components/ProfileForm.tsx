@@ -22,6 +22,9 @@ function ProfileForm() {
       })
       setStatus('success')
       setMessage('Profile processed! Head to the Dashboard to see your skills.')
+      window.dispatchEvent(new CustomEvent('profile-updated', {
+        detail: { current_role: role, career_goal: goal },
+      }))
     } catch (err) {
       setStatus('error')
       setMessage('Error submitting profile. Is the backend running?')

@@ -25,9 +25,10 @@ const InsightsPanel: React.FC = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const load = async () => {
+    const fetchInsights = async (payload: { current_role?: string; career_goal?: string } = {}) => {
+      setLoading(true)
       try {
-        const response = await axios.post('/api/insights', { current_role: '', career_goal: '' })
+        const response = await axios.post('/api/insights', payload)
         setInsights(response.data)
       } catch {
         setInsights(null)
@@ -35,7 +36,18 @@ const InsightsPanel: React.FC = () => {
         setLoading(false)
       }
     }
-    load()
+
+    const handleProfileUpdated = (event: Event) => {
+      const detail = (event as CustomEvent<{ current_role?: string; career_goal?: string }>).detail || {}
+      fetchInsights({ current_role: detail.current_role ?? '', career_goal: detail.career_goal ?? '' })
+    }
+
+    fetchInsights()
+    window.addEventListener('profile-updated', handleProfileUpdated as EventListener)
+
+    return () => {
+      window.removeEventListener('profile-updated', handleProfileUpdated as EventListener)
+    }
   }, [])
 
   return (
