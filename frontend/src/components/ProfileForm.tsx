@@ -141,6 +141,31 @@ function ProfileForm() {
         </div>
       </form>
 
+      {/* Recommendation card */}
+      <div className="mt-6 glass p-5 space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="section-label">Recommended next moves</p>
+            <h3 className="text-lg font-semibold text-slate-900">Personal learning path</h3>
+          </div>
+          <span className="stat-badge stat-badge-blue">Adaptive</span>
+        </div>
+        <div className="grid gap-3 md:grid-cols-3">
+          <div className="rounded-xl border border-slate-200 p-3">
+            <p className="text-sm font-semibold text-slate-900">Deepen</p>
+            <p className="text-sm text-slate-600 mt-1">Focus on a capability that increases leverage across your target roles.</p>
+          </div>
+          <div className="rounded-xl border border-slate-200 p-3">
+            <p className="text-sm font-semibold text-slate-900">Show proof</p>
+            <p className="text-sm text-slate-600 mt-1">Turn your learning into visible artifacts and portfolio evidence.</p>
+          </div>
+          <div className="rounded-xl border border-slate-200 p-3">
+            <p className="text-sm font-semibold text-slate-900">Expand reach</p>
+            <p className="text-sm text-slate-600 mt-1">Bridge into adjacent roles with one complementary capability.</p>
+          </div>
+        </div>
+      </div>
+
       {/* Info card */}
       <div className="mt-6 glass p-5 space-y-3">
         <p className="section-label">How it works</p>

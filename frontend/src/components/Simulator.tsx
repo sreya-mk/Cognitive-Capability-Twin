@@ -5,6 +5,8 @@ interface SimResult {
   before: number
   after: number
   explanation: string
+  scenario: string
+  next_move: string
 }
 
 const Simulator: React.FC = () => {
@@ -30,6 +32,8 @@ const Simulator: React.FC = () => {
         before: resp.data.employability_before,
         after: resp.data.employability_after,
         explanation: resp.data.explanation,
+        scenario: selectedSkill.includes('Python') || selectedSkill.includes('Machine Learning') ? 'AI acceleration' : 'Career pivot',
+        next_move: selectedSkill.includes('Python') || selectedSkill.includes('Machine Learning') ? 'Broaden into applied systems and deployment work' : 'Pair this skill with communication and portfolio evidence',
       })
     } catch {
       // handle silently
@@ -45,9 +49,9 @@ const Simulator: React.FC = () => {
       <div className="mb-6 glass p-6 rounded-2xl">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">Opportunity Simulator</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">Capability Foresight</h2>
             <p className="text-slate-600 text-sm leading-relaxed max-w-2xl">
-              Explore how a new capability could improve your marketability by simulating it against role templates and growth scenarios.
+              Model future career leverage by testing how a new capability could shift your role fit, unlock adjacent paths, and reshape your next move.
             </p>
           </div>
           <span className="stat-badge stat-badge-blue">Explainable insights</span>
@@ -56,7 +60,7 @@ const Simulator: React.FC = () => {
 
       <div className="glass p-6 rounded-2xl space-y-5">
         <div className="space-y-2">
-          <label className="section-label">What if I learned…</label>
+          <label className="section-label">What capability would you like to test?</label>
           <div className="flex gap-3">
             <select
               id="skill-select"
@@ -81,7 +85,7 @@ const Simulator: React.FC = () => {
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.4 0 0 5.4 0 12h4z" />
                 </svg>
               ) : (
-                'Simulate →'
+                'Forecast →'
               )}
             </button>
           </div>
@@ -136,9 +140,19 @@ const Simulator: React.FC = () => {
             {/* Explanation */}
             <div className="glass p-4 rounded-xl space-y-2">
               <p className="section-label">Rule-based Explanation</p>
-              <p className="text-sm text-slate-700 leading-relaxed">{result.explanation}</p>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <p className="section-label">Strategic interpretation</p>
+                  <p className="text-sm text-slate-700 leading-relaxed">{result.explanation}</p>
+                </div>
+                <div className="glass p-4 rounded-xl">
+                  <p className="section-label">Scenario signal</p>
+                  <p className="text-sm font-semibold text-slate-900">{result.scenario}</p>
+                  <p className="text-sm text-slate-600 mt-2">Recommended next move: {result.next_move}</p>
+                </div>
+              </div>
               <p className="text-xs text-slate-500 italic">
-                ⓘ This is a rule-based explainable layer — a stepping stone toward SHAP/LIME-based explanations once a trained model exists.
+                ⓘ This is a rule-based explainable layer designed to make strategy recommendations feel transparent and actionable.
               </p>
             </div>
           </div>

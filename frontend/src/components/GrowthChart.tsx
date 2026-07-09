@@ -55,6 +55,9 @@ const GrowthChart: React.FC = () => {
     return row
   })
 
+  const leverageScore = skills.length > 0 ? Math.min(96, Math.round(skills.slice(0, 4).reduce((acc, s) => acc + s.confidence, 0) / Math.max(skills.slice(0, 4).length, 1) + (skills.length * 2))) : 0
+  const nextMilestone = skills.length > 0 ? skills[0].name : 'your first capability'
+
   return (
     <div className="glass p-5 space-y-4">
       <div className="flex items-center justify-between">
@@ -64,6 +67,21 @@ const GrowthChart: React.FC = () => {
         </div>
         <span className="stat-badge stat-badge-purple">Logistic Heuristic</span>
       </div>
+
+      {!loading && skills.length > 0 && (
+        <div className="grid gap-3 md:grid-cols-2">
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+            <p className="section-label">Leverage score</p>
+            <p className="text-2xl font-semibold text-slate-900">{leverageScore}</p>
+            <p className="text-sm text-slate-600">How strongly your current skill set compounds across adjacent opportunities.</p>
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+            <p className="section-label">Next milestone</p>
+            <p className="text-sm font-semibold text-slate-900">{nextMilestone}</p>
+            <p className="text-sm text-slate-600">A strong signal for your next high-leverage capability move.</p>
+          </div>
+        </div>
+      )}
 
       {loading ? (
         <div className="h-64 flex items-center justify-center text-slate-500 text-sm">
@@ -107,7 +125,25 @@ const GrowthChart: React.FC = () => {
       )}
 
       {skills.length > 0 && (
-        <div className="pt-2 border-t border-white/5">
+        <div className="pt-2 border-t border-slate-200 space-y-3">
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
+            <span className="font-semibold text-slate-900">Future path:</span> your capability curve suggests a move toward deeper mastery in {nextMilestone}, which can unlock adjacent roles faster than isolated learning.
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-white p-3">
+            <p className="section-label">Career path timeline</p>
+            <div className="mt-2 flex items-center gap-2 text-sm text-slate-600">
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+              <span>Now: establish a strong base with {skills[0]?.name || 'your core capability'}.</span>
+            </div>
+            <div className="mt-2 flex items-center gap-2 text-sm text-slate-600">
+              <span className="h-2.5 w-2.5 rounded-full bg-blue-500" />
+              <span>Next 90 days: turn momentum into proof via projects, portfolios, or demos.</span>
+            </div>
+            <div className="mt-2 flex items-center gap-2 text-sm text-slate-600">
+              <span className="h-2.5 w-2.5 rounded-full bg-violet-500" />
+              <span>Next 180 days: expand into adjacent roles through complementary capability stacking.</span>
+            </div>
+          </div>
           <div className="flex flex-wrap gap-2">
             {skills.slice(0, 6).map((s, i) => (
               <div key={s.name} className="flex items-center gap-1.5 text-xs text-slate-600">

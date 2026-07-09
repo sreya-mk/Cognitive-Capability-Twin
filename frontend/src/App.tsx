@@ -116,7 +116,26 @@ function App() {
                   </div>
                 </div>
               </section>
-              <ProfileForm />
+              <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+                <ProfileForm />
+                <div className="glass p-6 rounded-2xl h-fit">
+                  <p className="section-label">Why this is different</p>
+                  <h3 className="text-xl font-semibold text-slate-900 mt-2">Your capability memory</h3>
+                  <p className="text-sm text-slate-600 mt-3 leading-7">
+                    This platform treats your skills as an evolving system, not just a list. It helps you see how a single capability creates leverage across roles, growth stages, and future opportunities.
+                  </p>
+                  <div className="mt-5 space-y-3">
+                    <div className="rounded-xl border border-slate-200 p-3">
+                      <p className="text-sm font-semibold text-slate-900">Scenario planning</p>
+                      <p className="text-sm text-slate-600">Forecast how a new skill changes your role fit and employer signal.</p>
+                    </div>
+                    <div className="rounded-xl border border-slate-200 p-3">
+                      <p className="text-sm font-semibold text-slate-900">Capability memory</p>
+                      <p className="text-sm text-slate-600">Keep a living record of your growth rather than a static resume.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
           {activeTab === 'dashboard' && (
