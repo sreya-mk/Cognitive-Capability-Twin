@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
-function ProfileForm() {
+function ProfileForm({ onOpenPrivacy }: { onOpenPrivacy?: () => void }) {
   const [rawText, setRawText] = useState('')
   const [hours, setHours] = useState('')
   const [role, setRole] = useState('')
@@ -234,7 +234,7 @@ function ProfileForm() {
         </div>
       </div>
 
-      <div className="mt-6 glass p-5">
+      <button type="button" onClick={onOpenPrivacy} className="mt-6 glass block w-full p-5 text-left transition hover:border-teal-300 hover:shadow-lg">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="section-label">Account &amp; privacy</p>
@@ -250,7 +250,7 @@ function ProfileForm() {
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-3"><p className="text-xs font-semibold text-slate-900">Skills</p><p className="text-xs text-slate-500 mt-1">Saved in skills</p></div>
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-3"><p className="text-xs font-semibold text-slate-900">Insights</p><p className="text-xs text-slate-500 mt-1">Saved in insight_records</p></div>
         </div>
-      </div>
+      </button>
     </div>
   )
 }
