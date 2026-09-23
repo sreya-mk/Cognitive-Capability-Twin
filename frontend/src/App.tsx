@@ -19,11 +19,17 @@ function App() {
   const [activeTab, setActiveTab] = useState<'profile' | 'dashboard' | 'history' | 'simulate'>('profile')
   const [accountOpen, setAccountOpen] = useState(false)
   const [accountMessage, setAccountMessage] = useState('')
+  const [privacyOpen, setPrivacyOpen] = useState(false)
 
   const showProfileArea = (message = '') => {
     setActiveTab('profile')
     setAccountOpen(false)
     setAccountMessage(message)
+  }
+
+  const showPrivacy = () => {
+    setAccountOpen(false)
+    setPrivacyOpen(true)
   }
 
   return (
@@ -94,7 +100,7 @@ function App() {
               </div>
               <button className="account-menu-item" onClick={() => showProfileArea()}><span>◎</span> Profile</button>
               <button className="account-menu-item" onClick={() => showProfileArea('Settings are available in your profile workspace.') }><span>⚙</span> Settings</button>
-              <button className="account-menu-item" onClick={() => showProfileArea('Your profile is stored locally in the project SQLite database.') }><span>▣</span> Data &amp; Privacy</button>
+              <button className="account-menu-item" onClick={showPrivacy}><span>▣</span> Data &amp; Privacy</button>
               <button className="account-menu-item text-rose-600 hover:bg-rose-50" onClick={() => showProfileArea('Demo mode has no authentication session. Your saved profile remains in the database.') }><span>↪</span> Log out</button>
             </div>
           )}
@@ -220,6 +226,30 @@ function App() {
         © 2026 Cognitive Capability Twin · Portfolio Demo ·{' '}
         <span className="text-slate-500">All ML labels are honest heuristics, not trained models</span>
       </footer>
+
+      {privacyOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/35 p-4" role="dialog" aria-modal="true" aria-labelledby="privacy-title">
+          <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="section-label">Data &amp; Privacy</p>
+                <h2 id="privacy-title" className="mt-1 text-xl font-semibold text-slate-950">Where your information is stored</h2>
+              </div>
+              <button type="button" aria-label="Close privacy dialog" onClick={() => setPrivacyOpen(false)} className="rounded-lg px-2 py-1 text-xl text-slate-400 hover:bg-slate-100 hover:text-slate-700">×</button>
+            </div>
+            <p className="mt-4 text-sm leading-6 text-slate-600">This local demo stores your information in the backend SQLite database. It is not sent anywhere unless an LLM API key is configured for skill extraction.</p>
+            <div className="mt-5 space-y-3">
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3"><p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Database file</p><p className="mt-1 font-mono text-sm text-slate-900">backend/app.db</p></div>
+              <div className="grid gap-3 sm:grid-cols-3">
+                <div className="rounded-xl border border-slate-200 p-3"><p className="text-sm font-semibold text-slate-900">Profile</p><p className="mt-1 text-xs text-slate-500">user_profile</p></div>
+                <div className="rounded-xl border border-slate-200 p-3"><p className="text-sm font-semibold text-slate-900">Skills</p><p className="mt-1 text-xs text-slate-500">skills</p></div>
+                <div className="rounded-xl border border-slate-200 p-3"><p className="text-sm font-semibold text-slate-900">Insights</p><p className="mt-1 text-xs text-slate-500">insight_records</p></div>
+              </div>
+            </div>
+            <div className="mt-6 flex justify-end"><button type="button" className="btn-primary" onClick={() => setPrivacyOpen(false)}>Close</button></div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
