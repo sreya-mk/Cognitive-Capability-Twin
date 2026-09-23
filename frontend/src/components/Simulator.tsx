@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
 interface SimResult {
+  skill: string
   before: number
   after: number
   explanation: string
@@ -13,6 +14,11 @@ const Simulator: React.FC = () => {
   const [availableSkills, setAvailableSkills] = useState<string[]>([])
   const [selectedSkill, setSelectedSkill] = useState('')
   const [result, setResult] = useState<SimResult | null>(null)
+  const [compareCandidate, setCompareCandidate] = useState('')
+  const [compareSkills, setCompareSkills] = useState<string[]>([])
+  const [comparison, setComparison] = useState<SimResult[]>([])
+  const [compareLoading, setCompareLoading] = useState(false)
+  const [compareError, setCompareError] = useState('')
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -29,6 +35,7 @@ const Simulator: React.FC = () => {
     try {
       const resp = await axios.post('/api/simulate', { new_skill: selectedSkill })
       setResult({
+        skill: selectedSkill,
         before: resp.data.employability_before,
         after: resp.data.employability_after,
         explanation: resp.data.explanation,
@@ -39,6 +46,44 @@ const Simulator: React.FC = () => {
       // handle silently
     } finally {
       setLoading(false)
+    }
+  }
+
+  const addCompareSkill = () => {
+    if (!compareCandidate || compareSkills.includes(compareCandidate) || compareSkills.length >= 3) return
+    setCompareSkills(current => [...current, compareCandidate])
+    setCompareCandidate('')
+    setCompareError('')
+  }
+
+  const removeCompareSkill = (skill: string) => {
+    setCompareSkills(current => current.filter(item => item !== skill))
+  }
+
+  const applyPreset = (skills: string[]) => {
+    setCompareSkills(skills.filter(skill => availableSkills.includes(skill)).slice(0, 3))
+    setComparison([])
+    setCompareError('')
+  }
+
+  const compareScenario = async () => {
+    if (compareSkills.length < 2) return
+    setCompareLoading(true)
+    setCompareError('')
+    try {
+      const responses = await Promise.all(compareSkills.map(skill => axios.post('/api/simulate', { new_skill: skill })))
+      setComparison(responses.map((response, index) => ({
+        skill: compareSkills[index],
+        before: response.data.employability_before,
+        after: response.data.employability_after,
+        explanation: response.data.explanation,
+        scenario: compareSkills[index].includes('Python') || compareSkills[index].includes('Machine Learning') ? 'AI acceleration' : 'Career pivot',
+        next_move: response.data.new_roles_unlocked?.length ? `${response.data.new_roles_unlocked.length} role(s) unlocked` : 'Pair this skill with communication and portfolio evidence',
+      })))
+    } catch {
+      setCompareError('The scenario comparison could not be completed. Check that the backend is running.')
+    } finally {
+      setCompareLoading(false)
     }
   }
 
@@ -90,6 +135,42 @@ const Simulator: React.FC = () => {
             </button>
           </div>
         </div>
+
+        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <p className="section-label">Scenario comparison</p>
+              <p className="text-sm text-slate-600 mt-1">Compare up to three capabilities before choosing your next move.</p>
+            </div>
+            <span className="text-xs text-slate-500">{compareSkills.length}/3 selected</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button type="button" className="scenario-preset" onClick={() => applyPreset(['Machine Learning', 'Deep Learning', 'MLOps'])}>AI Builder</button>
+            <button type="button" className="scenario-preset" onClick={() => applyPreset(['Data Engineering', 'Spark', 'Kafka'])}>Data Platform</button>
+            <button type="button" className="scenario-preset" onClick={() => applyPreset(['TypeScript', 'React', 'Node.js'])}>Product Engineer</button>
+          </div>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <select className="input-field flex-1" value={compareCandidate} onChange={e => setCompareCandidate(e.target.value)}>
+              <option value="">Add a capability</option>
+              {availableSkills.filter(skill => !compareSkills.includes(skill)).map(skill => <option key={skill} value={skill}>{skill}</option>)}
+            </select>
+            <button type="button" className="scenario-button" onClick={addCompareSkill} disabled={!compareCandidate || compareSkills.length >= 3}>Add capability</button>
+            <button type="button" className="scenario-button" onClick={() => { setCompareSkills([]); setComparison([]) }} disabled={compareSkills.length === 0}>Clear</button>
+          </div>
+          {compareSkills.length > 0 && <div className="flex flex-wrap gap-2">{compareSkills.map(skill => <button type="button" key={skill} className="scenario-chip" onClick={() => removeCompareSkill(skill)}>{skill} ×</button>)}</div>}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <button type="button" className="btn-primary" onClick={compareScenario} disabled={compareSkills.length < 2 || compareLoading}>{compareLoading ? 'Comparing...' : 'Compare scenario'}</button>
+            {compareError && <p className="text-sm text-rose-600">{compareError}</p>}
+          </div>
+        </div>
+
+        {comparison.length > 0 && <div className="space-y-3 border-t border-slate-200 pt-4 animate-fade-in">
+          <div className="flex items-center justify-between"><p className="section-label">Scenario results</p><p className="text-xs text-slate-500">Higher delta = stronger immediate leverage</p></div>
+          <div className="grid gap-3 md:grid-cols-3">{comparison.map(item => {
+            const itemDelta = item.after - item.before
+            return <article key={item.skill} className="scenario-result"><div className="flex items-start justify-between gap-2"><p className="text-sm font-semibold text-slate-900">{item.skill}</p><span className="text-sm font-mono font-semibold text-emerald-600">+{itemDelta.toFixed(1)}%</span></div><div className="mt-3 h-2 rounded-full bg-slate-200"><div className="h-2 rounded-full bg-gradient-to-r from-teal-500 to-blue-500" style={{ width: `${Math.min(100, Math.max(0, item.after))}%` }} /></div><p className="mt-3 text-xs leading-5 text-slate-600">{item.next_move}</p></article>
+          })}</div>
+        </div>}
 
         {result && (
           <div className="animate-fade-in space-y-4 pt-2 border-t border-white/5">
