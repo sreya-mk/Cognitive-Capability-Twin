@@ -1,0 +1,82 @@
+{
+  "AI / ML Engineer": {
+    "required": ["Python", "Machine Learning", "Deep Learning", "MLOps", "Docker", "Git"],
+    "weight": 1.0
+  },
+  "Data Scientist": {
+    "required": ["Python", "Machine Learning", "Statistics", "Data Analysis", "SQL", "Git"],
+    "weight": 1.0
+  },
+  "Data Analyst": {
+    "required": ["Python", "Data Analysis", "SQL", "Statistics", "Git"],
+    "weight": 0.9
+  },
+  "Data Engineer": {
+    "required": ["Python", "Data Engineering", "SQL", "Spark", "Kafka", "Docker", "Git"],
+    "weight": 1.0
+  },
+  "NLP Engineer": {
+    "required": ["Python", "Machine Learning", "Deep Learning", "NLP", "Git"],
+    "weight": 1.0
+  },
+  "Computer Vision Engineer": {
+    "required": ["Python", "Machine Learning", "Deep Learning", "Computer Vision", "Git"],
+    "weight": 1.0
+  },
+  "Backend Engineer": {
+    "required": ["Python", "REST APIs", "SQL", "Docker", "Git"],
+    "weight": 0.9
+  },
+  "Frontend Developer": {
+    "required": ["JavaScript", "TypeScript", "React", "Git"],
+    "weight": 0.8
+  },
+  "Full-Stack Developer": {
+    "required": ["JavaScript", "TypeScript", "React", "Node.js", "SQL", "Git"],
+    "weight": 1.0
+  },
+  "DevOps Engineer": {
+    "required": ["Docker", "Kubernetes", "CI/CD", "Terraform", "Git", "Bash"],
+    "weight": 1.0
+  },
+  "Cloud Engineer": {
+    "required": ["Cloud Computing", "AWS", "Terraform", "Docker", "Kubernetes", "Git"],
+    "weight": 1.0
+  },
+  "Site Reliability Engineer": {
+    "required": ["Docker", "Kubernetes", "CI/CD", "Bash", "Cloud Computing", "Git"],
+    "weight": 1.0
+  },
+  "Software Engineer (General)": {
+    "required": ["Python", "Git", "REST APIs", "SQL"],
+    "weight": 0.7
+  },
+  "Go Developer": {
+    "required": ["Go", "REST APIs", "Docker", "Git"],
+    "weight": 0.9
+  },
+  "Java Developer": {
+    "required": ["Java", "SQL", "REST APIs", "Git"],
+    "weight": 0.9
+  },
+  "Database Administrator": {
+    "required": ["SQL", "PostgreSQL", "MongoDB", "Redis", "Git"],
+    "weight": 0.8
+  },
+  "Platform Engineer": {
+    "required": ["Kubernetes", "Terraform", "CI/CD", "Cloud Computing", "Git"],
+    "weight": 1.0
+  },
+  "Research Engineer": {
+    "required": ["Python", "Machine Learning", "Deep Learning", "Statistics", "Git"],
+    "weight": 1.0
+  },
+  "Product Analyst": {
+    "required": ["Data Analysis", "SQL", "Statistics", "Communication"],
+    "weight": 0.8
+  },
+  "Engineering Manager": {
+    "required": ["Leadership", "Communication", "Teamwork", "Critical Thinking", "Git"],
+    "weight": 0.7
+  }
+}
