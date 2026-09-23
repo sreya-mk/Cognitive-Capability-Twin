@@ -204,6 +204,104 @@
     box-shadow: 0 10px 22px rgba(15, 118, 110, 0.1);
   }
 
+  .interview-panel {
+    padding: 1.5rem;
+    border: 1px solid rgba(37, 99, 235, 0.16);
+    border-radius: 1.25rem;
+    background: linear-gradient(135deg, rgba(239, 246, 255, 0.96), rgba(248, 250, 252, 0.95));
+    box-shadow: 0 14px 36px rgba(37, 99, 235, 0.08);
+  }
+
+  .interview-kicker {
+    color: #1d4ed8;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .interview-kicker::before {
+    content: '◈';
+    margin-right: 0.4rem;
+    color: #3b82f6;
+  }
+
+  .interview-chip {
+    border: 1px solid rgba(37, 99, 235, 0.15);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 0.45rem 0.75rem;
+  }
+
+  .interview-question-nav {
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    gap: 0.65rem;
+    border: 1px solid transparent;
+    border-radius: 0.75rem;
+    padding: 0.7rem;
+    text-align: left;
+    color: #475569;
+    font-size: 0.8rem;
+    line-height: 1.35;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .interview-question-nav:hover,
+  .interview-question-active {
+    border-color: rgba(37, 99, 235, 0.18);
+    background: rgba(255, 255, 255, 0.8);
+    color: #172554;
+  }
+
+  .interview-question-nav span:first-child,
+  .interview-number {
+    flex: 0 0 auto;
+    color: #2563eb;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  .interview-detail {
+    border-radius: 0.85rem;
+    background: rgba(239, 246, 255, 0.75);
+    padding: 0.85rem;
+  }
+
+  .interview-detail p:last-child {
+    margin-top: 0.45rem;
+    color: #475569;
+    font-size: 0.8rem;
+    line-height: 1.45;
+  }
+
+  .interview-nav-button {
+    border: 1px solid #cbd5e1;
+    border-radius: 0.65rem;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 0.55rem 0.85rem;
+    color: #475569;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .interview-nav-button:hover:not(:disabled) {
+    background: #ffffff;
+  }
+
+  .interview-nav-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
+
+  .interview-nav-primary {
+    border-color: #2563eb;
+    background: #2563eb;
+    color: #ffffff;
+  }
+
   /* Primary button */
   .btn-primary {
     background: linear-gradient(135deg, #14b8a6, #2563eb);

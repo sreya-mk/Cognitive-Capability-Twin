@@ -108,6 +108,18 @@ class CopilotResponse(BaseModel):
     action_plan: List[CopilotAction]
     mode: str
 
+class InterviewQuestion(BaseModel):
+    question: str
+    intent: str
+    answer_framework: str
+    evidence_prompt: str
+
+class InterviewResponse(BaseModel):
+    role: str
+    intro: str
+    questions: List[InterviewQuestion]
+    mode: str
+
 # ─── Endpoints ───────────────────────────────────────────────────────────────
 
 @router.get("/profile", response_model=ProfileResponse | None, summary="Get the latest saved profile")
@@ -286,6 +298,57 @@ def generate_copilot_plan():
             focus_areas=focus_areas,
             action_plan=action_plan,
             mode="AI-assisted heuristic plan",
+        )
+    finally:
+        db.close()
+
+
+@router.post("/interview", response_model=InterviewResponse, summary="Generate an AI-assisted interview practice set")
+def generate_interview_set():
+    db = SessionLocal()
+    try:
+        profile = db.query(UserProfile).order_by(UserProfile.id.desc()).first()
+        skills = sorted(db.query(Skill).all(), key=lambda skill: skill.confidence, reverse=True)
+        role = profile.career_goal if profile and profile.career_goal else "your target role"
+        strengths = [skill.name for skill in skills[:3]] or ["your strongest capability"]
+        focus = " and ".join([skill.name for skill in skills[-2:]]) if len(skills) >= 2 else "a capability gap"
+        questions = [
+            InterviewQuestion(
+                question=f"Walk me through a project where you used {strengths[0]} to create a measurable result.",
+                intent="Tests ownership, practical depth, and whether your work created impact.",
+                answer_framework="Context → your decision → implementation → measurable result → lesson.",
+                evidence_prompt="Name the scale, constraint, trade-off, and one metric that changed.",
+            ),
+            InterviewQuestion(
+                question=f"How would you approach building a reliable system in a {role} context?",
+                intent="Tests systems thinking and engineering judgment beyond tool familiarity.",
+                answer_framework="Clarify requirements → propose a simple design → discuss failure modes → define observability.",
+                evidence_prompt=f"Connect the answer to your experience with {', '.join(strengths)}.",
+            ),
+            InterviewQuestion(
+                question=f"What is your current development gap around {focus}, and how are you closing it?",
+                intent="Tests self-awareness, learning velocity, and honesty about the gap.",
+                answer_framework="Name the gap → explain why it matters → show your learning loop → share proof so far.",
+                evidence_prompt="Bring one artifact, experiment, course outcome, or feedback loop.",
+            ),
+            InterviewQuestion(
+                question="Tell me about a time a technical decision did not work as expected.",
+                intent="Tests resilience, communication, and ability to learn without hiding the failure.",
+                answer_framework="Situation → failed assumption → recovery → what you changed permanently.",
+                evidence_prompt="Avoid blame; quantify the impact and describe the corrective action.",
+            ),
+            InterviewQuestion(
+                question=f"Why is this {role} move the right next step for you now?",
+                intent="Tests motivation and whether your career story is coherent.",
+                answer_framework="Current foundation → specific pull toward the role → proof of preparation → next contribution.",
+                evidence_prompt=f"Tie your motivation to {strengths[0]} and a concrete problem you want to solve.",
+            ),
+        ]
+        return InterviewResponse(
+            role=role,
+            intro=f"Practice the questions most likely to reveal your readiness for {role}. Use your own project evidence rather than memorized answers.",
+            questions=questions,
+            mode="AI-assisted practice set",
         )
     finally:
         db.close()
