@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
-function ProfileForm({ onOpenPrivacy }: { onOpenPrivacy?: () => void }) {
+function ProfileForm() {
   const [rawText, setRawText] = useState('')
   const [hours, setHours] = useState('')
   const [role, setRole] = useState('')
@@ -215,42 +215,6 @@ function ProfileForm({ onOpenPrivacy }: { onOpenPrivacy?: () => void }) {
         </div>
       </div>
 
-      {/* Info card */}
-      <div className="mt-6 glass p-5 space-y-3">
-        <p className="section-label">How it works</p>
-        <div className="space-y-2 text-sm text-slate-600">
-          <div className="flex items-start gap-2">
-            <span className="text-teal-400 mt-0.5">①</span>
-            <span>Your text is sent to an LLM (OpenAI / Anthropic) with a structured prompt requesting JSON skill output.</span>
-          </div>
-          <div className="flex items-start gap-2">
-            <span className="text-blue-400 mt-0.5">②</span>
-            <span>Each skill is stored in SQLite with a name, category, and confidence score (0–100).</span>
-          </div>
-          <div className="flex items-start gap-2">
-            <span className="text-purple-400 mt-0.5">③</span>
-            <span>A logistic growth formula projects your confidence at 30 / 90 / 180 days based on study hours and skill difficulty.</span>
-          </div>
-        </div>
-      </div>
-
-      <button type="button" onClick={onOpenPrivacy} className="mt-6 glass block w-full p-5 text-left transition hover:border-teal-300 hover:shadow-lg">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <p className="section-label">Account &amp; privacy</p>
-            <h3 className="text-lg font-semibold text-slate-900 mt-1">Your profile data stays with this workspace</h3>
-            <p className="text-sm text-slate-600 mt-2 max-w-2xl leading-6">
-              Profile details and extracted skills are stored by the FastAPI backend in a local SQLite database. The default file is <span className="font-mono text-xs text-slate-800">backend/app.db</span>; set <span className="font-mono text-xs text-slate-800">DB_PATH</span> to use another location.
-            </p>
-          </div>
-          <span className="stat-badge stat-badge-green">Local storage</span>
-        </div>
-        <div className="mt-4 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3"><p className="text-xs font-semibold text-slate-900">Profile</p><p className="text-xs text-slate-500 mt-1">Saved in user_profile</p></div>
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3"><p className="text-xs font-semibold text-slate-900">Skills</p><p className="text-xs text-slate-500 mt-1">Saved in skills</p></div>
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3"><p className="text-xs font-semibold text-slate-900">Insights</p><p className="text-xs text-slate-500 mt-1">Saved in insight_records</p></div>
-        </div>
-      </button>
     </div>
   )
 }

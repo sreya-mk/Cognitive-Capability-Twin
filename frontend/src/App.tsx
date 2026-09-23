@@ -160,7 +160,7 @@ function App() {
                 </div>
               </section>
               <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-                <ProfileForm onOpenPrivacy={() => { setPrivacyOpen(true); setAccountMessage('') }} />
+                <ProfileForm />
                 <div className="glass p-6 rounded-2xl h-fit">
                   <p className="section-label">Why this is different</p>
                   <h3 className="text-xl font-semibold text-slate-900 mt-2">Your capability memory</h3>
